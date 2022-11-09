@@ -1,0 +1,25 @@
+{
+    "name": "Event Automatic Adder",
+    "description": "Automatically add events to your calendar",
+    "version": "1.0",
+    "manifest_version": 3,
+    "permissions": [
+        "contextMenus", 
+        "storage", 
+        "notifications",
+        "nativeMessaging"
+    ],
+    "host_permissions": [
+        "https://example-app-giap.herokuapp.com/*"
+    ],
+    "background": {
+        "service_worker": "background.js",
+        "script": ["popup.js"]
+    }, 
+    "action": { 
+        "default_popup": "popup.html"
+    }, 
+    "icons": { 
+        "16": "resources/random.png"
+    }
+}
