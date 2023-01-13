@@ -1,27 +1,22 @@
-from .db import db
-import sqlalchemy as sa
+from .database import db
 
 
 class User(db.Model):
-	userId = sa.Column(sa.Integer, primary_key=True, nullable=False)
-	userName = sa.Column(sa.String, nullable=False) 
-	password = sa.Column(sa.String, nullable=False)
-	email = sa.Column(sa.String)
-	phoneNumber = sa.Column(sa.String)
+	id = db.Column(db.Integer, primary_key=True) # SQLAlchemy automatically auto increment
+	username = db.Column(db.String, nullable=False, unique=True) 
+	password = db.Column(db.String, nullable=False)
+	email = db.Column(db.String, unique=True)
+	phone_number = db.Column(db.String)
 
 class Event(db.Model): 
-	eventId = sa.Column(sa.Integer, primary_key=True, nullable=False)
-	userId = sa.Column(sa.Integer, nullable=False, foreign_key=True)
-	parentId = sa.Column(sa.Integer)
-	name = sa.Column(sa.String, nullable=False)
-	startTime = sa.Column(sa.DateTime, nullable=False) 
-	endTime = sa.Column(sa.DateTime, nullable=False)
-	eventType = sa.Column(sa.String)
-	location = sa.Column(sa.String) 
-	overview = sa.Column(sa.String) 
-	# participantsId = sa.Column(sa.ARRAY(sa.Integer)) #list of known participants
-	# participantsName = sa.Column(sa.ARRAY(sa.String)) #list of unknown participants
-
-	
-class sth(): 
-    pass
+	id = db.Column(db.Integer, primary_key=True) # SQLAlchemy automatically auto increment
+	user_id = db.Column(db.Integer, nullable=False, foreign_key=True)
+	parent_id = db.Column(db.Integer)
+	name = db.Column(db.String(50), nullable=False)
+	start_time = db.Column(db.DateTime, nullable=False) 
+	end_time = db.Column(db.DateTime, nullable=False)
+	type = db.Column(db.String(20))
+	location = db.Column(db.String(50)) 
+	overview = db.Column(db.String(200)) 
+	# participantsId = db.Column(db.ARRAY(db.Integer)) #list of known participants
+	# participantsName = db.Column(db.ARRAY(db.String)) #list of unknown participants

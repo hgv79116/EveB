@@ -1,23 +1,25 @@
+# pay attention to g and session
+
 from flask import Blueprint, session, g, request, make_response
 from flask.json import jsonify
 import functools
 
 from .. import services
 
-auth_bp = Blueprint('auth', __name__)
+auth_bp = Blueprint('auth', __name__, url_prefix = '/auth')
 
 @auth_bp.before_app_request
 def load_user(): 
     user_id = session.get('user_id')
     if user_id is None: 
-        g['user_id'] = None
+        g.user = None
     else: 
-        g['user_id'] = user_id
+        g.user = services.load_user_from_id(user_id)
     
 def login_required(endpoint):
     @functools.wraps(endpoint)
     def modified_endpoint(*args, **kwargs): 
-        if g['user_id'] is None: 
+        if g.user is None: 
             msg, status = "Not logged in", 401
             return make_response(
                 jsonify({ 
@@ -33,8 +35,8 @@ def login_required(endpoint):
 def logout_first(endpoint):
     @functools.wraps(endpoint)
     def modified_endpoint(*args, **kwargs): 
-        if g['user_id'] is not None: 
-            g.clear()
+        if g.user is not None: 
+            g.user = None
             session.clear()
         return endpoint(*args, **kwargs)
         
@@ -45,9 +47,8 @@ def logout_first(endpoint):
 def registerUser(): 
     params = request.get_json()
     
-    register_successful = services.registerUser(params)
+    msg, status = services.registerUser(params)
     
-    msg, status = "Successfully registered", 200 if register_successful else "Username or email already taken", 401
     return make_response(
         jsonify({ 
             'msg': msg 
@@ -60,13 +61,12 @@ def registerUser():
 def login():
     params = request.get_json()
     
-    validate_successful, user_id = services.validateUser(params)
-    if validate_successful(): 
-        assert isinstance(user_id, int), "user_id must be int, found {}".format(type(user_id))
-        session.clear()
-        session['user_id'] = user_id
+    msg, status, user = services.validateUser(params)
     
-    msg, status = "Successfully logged in", 200 if validate_successful else "Wrong credential", 401
+    if user is not None: 
+        session.clear()
+        session['user_id'] = user.id
+    
     return make_response(
         jsonify({
             'msg': msg

@@ -10,7 +10,7 @@ from flask_bcrypt import Bcrypt
 from .config import config_by_name
 
 from .controllers import *
-from .db import db
+from .database import db
 
 flask_bcrypt = Bcrypt()
 
@@ -20,6 +20,7 @@ def create_app(config_name):
     
     db.init_app(app)
     with app.app_context():
+        db.drop_all()
         db.create_all()
     flask_bcrypt.init_app(app)
 
