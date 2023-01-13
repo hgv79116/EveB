@@ -6,6 +6,7 @@
 
 from flask import Flask
 from flask_bcrypt import Bcrypt
+from flask_cors import CORS
 
 from .config import config_by_name
 
@@ -24,8 +25,10 @@ def create_app(config_name):
         db.create_all()
     flask_bcrypt.init_app(app)
 
-    app.register_blueprint(auth_bp)
-
+    app.register_blueprint(event_bp)
+    app.register_blueprint(user_bp)
+    CORS(app)
+    
     return app
 
 app = create_app('dev')

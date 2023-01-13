@@ -1,1 +1,1 @@
-from .auth import validateUser, registerUser, load_user_from_id
+from .user import registerUser, deleteUser, validateUser, load_user_from_id
