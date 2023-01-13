@@ -1,13 +1,16 @@
-import React, { useState } from 'react';
-import { LoginPage, MainPage, RegisterPage} from "./index.jsx";
+import React, { useEffect, useState } from 'react';
+import { MainPage, AuthPage} from "./index.jsx";
+import loadUser from "../api/request.js"
 
 export default function Wrapper() { 
-    const [page, setPage] = useState("LoginPage");
+    const [user, setUser] = useState(null);
+    useEffect(() => { 
+        setUser(loadUser()); 
+    })
     return ( // return value need a wrapper element
         <div> 
-            {page == "LoginPage" && <LoginPage update={setPage}></LoginPage>}
-            {page == "RegisterPage" && <RegisterPage update={setPage}></RegisterPage>}
-            {page == "MainPage" && <MainPage update={setPage}></MainPage>}
+            {user !== null && <MainPage user={user} update={setUser}></MainPage>}
+            {user === null && <AuthPage update={setUser}></AuthPage>}
         </div>
     )
 }
