@@ -7,7 +7,7 @@
 from flask import Flask
 from flask_bcrypt import Bcrypt
 from flask_cors import CORS
-
+from datetime import timedelta
 from .config import config_by_name
 
 from .controllers import *
@@ -27,6 +27,7 @@ def create_app(config_name):
 
     app.register_blueprint(event_bp)
     app.register_blueprint(user_bp)
+    app.permanent_session_lifetime = timedelta(minutes=5)
     CORS(app)
     
     return app

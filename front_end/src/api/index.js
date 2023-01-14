@@ -34,7 +34,10 @@ export async function registerUser(params) {
         base_url + '/user/registerUser/', 
         { 
             method: "POST", 
-            body: params
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(params)
         }
     )
     return response.ok

@@ -13,7 +13,7 @@ with app.app_context():
     db.drop_all()
     db.create_all()
     app.logger.info(user1.id)
-    db.session.add(johndoe)
+    # db.session.add(johndoe)
     db.session.add(user1)
     db.session.add(user2)
     db.session.commit()
