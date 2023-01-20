@@ -2,6 +2,9 @@ import React, { useState } from 'react';
 import { useEffect } from 'react';
 import { login, registerUser } from '../api';
 
+import Button from 'react-bootstrap/Button';
+import Form from 'react-bootstrap/Form';
+
 const loginMode = "Login", registerMode = "Register"
 function reverseMode(formMode) { 
     return formMode === loginMode? registerMode: loginMode
@@ -65,24 +68,24 @@ function FormPage(props) {
     }
     
     return (
-        <form onSubmit={handleSubmit} onChange={handleChange} class = "rounded">
+        <Form onSubmit={handleSubmit} onChange={handleChange} className = "rounded">
             {
                 formMode === registerMode  && 
-                <div class="form-group">
-                    <label for="username">Username</label>
-                    <input id="username" name = "username" type = "text" defaultValue = {defaultFormContent.username} placeholder = "John Doe" class="form-control"/>
-                </div>
+                <Form.Group>
+                    <Form.Label>Username</Form.Label>
+                    <Form.Control id="username" name = "username" type = "text" defaultValue = {defaultFormContent.username} placeholder = "John Doe" />
+                </Form.Group>
             }
-            <div class="form-group">
-                    <label for="email">Email</label>
-                    <input id="email" name = "email" type = "email" defaultValue = {defaultFormContent.email} placeholder = "johndoe@gmail.com" class="form-control"/>
-            </div>
-            <div class="form-group">
-                <label for="password">Password</label>
-                <input id="password" name="password" type="password" defaultValue = {defaultFormContent.password} placeholder = "Random password" class="form-control"/>
-            </div>
-            <button type = "submit" class="btn btn-primary">{formMode}</button> 
-        </form>    
+            <Form.Group>
+                    <Form.Label>Email</Form.Label>
+                    <Form.Control id="email" name = "email" type = "email" defaultValue = {defaultFormContent.email} placeholder = "johndoe@gmail.com"/>
+            </Form.Group>
+            <Form.Group>
+                <Form.Label>Password</Form.Label>
+                <Form.Control id="password" name="password" type="password" defaultValue = {defaultFormContent.password} placeholder = "Random password" />
+            </Form.Group>
+            <Button type = "submit" class="btn btn-primary">{formMode}</Button> 
+        </Form>    
     )
 }
 

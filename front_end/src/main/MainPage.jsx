@@ -1,48 +1,116 @@
 import React, { useState } from "react";
-import Home from "./Home";
-import Events from "./Events";
-import Account from "./Account";
+import { Home } from "./Home";
+import { PastEvents, UpcomingEvents, CreateEvent} from "./Events";
+import { ChangePassword, ChangeInfo, Setting} from   "./Account";
 
-const home = "Home", account = "Account", events = 'Events'
+import Container from 'react-bootstrap/Container';
+import Nav from 'react-bootstrap/Nav';
+import Navbar from 'react-bootstrap/Navbar';
+import NavDropdown from 'react-bootstrap/NavDropdown';
+
+const modes = { 
+  home: 'home', 
+  events: { 
+    upcomingEvents: 'upcomingEvents', 
+    pastEvents: 'pastEvents', 
+    createEvent: 'createEvent'
+  }, 
+  account: { 
+    changePassword: 'changePassword', 
+    changeInfo: 'changeInfo', 
+    setting: 'setting', 
+  }
+}
 
 function Menu(props) { 
+  const setUser = props.setUser
   const setSection = props.setSection
+  
   return (
-    <nav class="navbar navbar-expand-lg navbar-light bg-light px-2">
-      <a class="navbar-brand" href="#" onClick = {() => setSection(home)}>EveB</a>
-      <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNavAltMarkup" aria-controls="navbarNavAltMarkup" aria-expanded="false" aria-label="Toggle navigation">
-        <span class="navbar-toggler-icon"></span>
-      </button>
-      <div class="collapse navbar-collapse" id="navbarNavAltMarkup">
-        <div class="navbar-nav">
-          <a class="nav-item nav-link" href="#" onClick = {() => setSection(home)}>Home</a>
-          <a class="nav-item nav-link" href="#" onClick = {() => setSection(events)}>My events</a>
-          <a class="nav-item nav-link" href="#" onClick = {() => setSection(account)}>My account</a>
-          <a class="nav-item nav-link disabled" href="#">Disabled</a>
-        </div>
-      </div>
-    </nav>
+    <Navbar className="navbar-expand-lg navbar-light bg-light px-2 w-100">
+      <Navbar.Brand onClick = {() => setSection(modes.home)}>EveB</Navbar.Brand>
+      <Navbar.Toggle data-toggle="collapse" data-target="#navbarNavAltMarkup" aria-controls="navbarNavAltMarkup" aria-expanded="false" />
+      <Navbar.Collapse className="collapse" id="navbarNavAltMarkup">
+        <Nav>
+          <Nav.Link onClick = {() => setSection(modes.home)}>Home</Nav.Link>
+          
+          <NavDropdown title="My Events">
+            
+            <NavDropdown.Item onClick={() => setSection(modes.events.upcomingEvents)}> 
+              Upcoming events 
+            </NavDropdown.Item>
+            
+            <NavDropdown.Item onClick={() => setSection(modes.events.pastEvents)}> 
+              Past events
+            </NavDropdown.Item>
+
+            <NavDropdown.Divider />
+
+            <NavDropdown.Item onClick={() => setSection(modes.events.createEvent)}> 
+              Create a new event 
+            </NavDropdown.Item>
+
+          </NavDropdown>
+          
+          <NavDropdown title="My Account">
+            <NavDropdown.Item onClick={() => setSection(modes.account.changeInfo)}> 
+              Change information
+            </NavDropdown.Item>
+            
+            <NavDropdown.Item onClick={() => setSection(modes.account.changePassword)}> 
+              Change password
+            </NavDropdown.Item>
+
+            <NavDropdown.Item onClick={() => setSection(modes.account.setting)}> 
+              Settings 
+            </NavDropdown.Item>
+
+            <NavDropdown.Divider />
+
+            <NavDropdown.Item onClick={() => setUser(null)}> 
+              Logout 
+            </NavDropdown.Item>
+          </NavDropdown>
+        </Nav>
+      </Navbar.Collapse>
+    </Navbar>
   )
 }
 
-export default function MainPage() {
-  const [section, setSection] = useState("Home")
+export default function MainPage(props) {
+  const [section, setSection] = useState(modes.home)
+  const user = props.user
+  const setUser = props.setUser
+
+  let Section = null
+  switch(section) { 
+    case modes.home: 
+      Section = <Home/>
+      break
+    case modes.events.pastEvents:  
+      Section = <PastEvents/>
+      break
+    case modes.events.upcomingEvents: 
+      Section = <UpcomingEvents/>
+      break
+    case modes.events.createEvent: 
+      Section = <CreateEvent/>
+      break
+    case modes.account.changeInfo: 
+      Section = <ChangeInfo/>
+      break
+    case modes.account.changePassword: 
+      Section = <ChangePassword/>
+      break
+    case modes.account.setting: 
+      Section = <Setting/>
+      break
+  }
   return (
     <div class = "container-fluid">
-      <Menu setSection={setSection}/>
+      <Menu setSection={setSection} setUser = {setUser}/>
       <div class= "container-fluid w-100 h-100 d-flex justify-content-center align-items-center">
-        {
-          section == home && 
-          <Home/>
-        }
-        {
-          section == events && 
-          <Events/>
-        }
-        {
-          section == account && 
-          <Account/>
-        }
+        {Section}
       </div>
     </div>
   )

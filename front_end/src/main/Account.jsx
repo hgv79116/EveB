@@ -1,13 +1,14 @@
 import React, { useState } from "react";
 import { useEffect } from "react";
-import { getUserInfo, updateUserInfo } from "../api";
+import Container from "react-bootstrap/esm/Container";
+import { getUserInfo, updateUserInfo, lo, logout } from "../api";
 const updateInfo = "updateInfo", updatePassword = "updatePassword"
 
 function capitalize(name) { 
     return name.charAt(0).toUpperCase() + name.slice(1)
 }
 
-function UpdateInfoForm(props) {     
+export function ChangeInfo(props) {     
     const defaultFlashMessage = ""
     const updateSucceeded = "Saved successfully"
     const updateFailed = "Save failed"
@@ -65,30 +66,33 @@ function UpdateInfoForm(props) {
     }
 
 return (
-        <form onSubmit={handleSubmit} onChange={handleChange} class = "rounded">
-            <div class="form-group">
-                <label for="username">Username</label>
-                <input id="username" name = "username" type = "text" defaultValue = {userInfo.username} class="form-control"/>
-            </div>
-            <div class="form-group">
-                <label for="email">Email</label>
-                <input id="email" name = "email" type = "email" defaultValue = {userInfo.email} class="form-control"/>
-            </div>
-            <div class="form-group">
-                <label for="password">Password</label>
-                <input id="password" name="password" type="password" defaultValue = {userInfo.password} class="form-control"/>
-            </div>
-            {other_form_groups}
-            <button type = "submit" class="btn btn-primary">Update</button> 
-        </form>    
+        <Container className="container-fluid">
+            <form onSubmit={handleSubmit} onChange={handleChange} class = "rounded">
+                <div class="form-group">
+                    <label for="username">Username</label>
+                    <input id="username" name = "username" type = "text" defaultValue = {userInfo.username} class="form-control"/>
+                </div>
+                <div class="form-group">
+                    <label for="email">Email</label>
+                    <input id="email" name = "email" type = "email" defaultValue = {userInfo.email} class="form-control"/>
+                </div>
+                <div class="form-group">
+                    <label for="password">Password</label>
+                    <input id="password" name="password" type="password" defaultValue = {userInfo.password} class="form-control"/>
+                </div>
+                {other_form_groups}
+                <button type = "submit" class="btn btn-primary">Update</button> 
+            </form>   
+        </Container>
     )
 
     return "hello"
 }
-
-export default function Account() {
-
   
-  return <UpdateInfoForm/>
+export function ChangePassword() {
+    return <div>Change password (WIP) </div>
 }
 
+export function Setting() {
+    return <div>Settings (WIP) </div>
+}

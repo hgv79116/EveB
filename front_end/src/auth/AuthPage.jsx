@@ -1,15 +1,19 @@
 import React, { useState } from 'react';
 import AuthSection from './AuthSection';
 import PreviewSection from './PreviewSection';
+
+import Row from "react-bootstrap/Row"
+import Col from "react-bootstrap/Col"
+
 export default function AuthPage(props) {
     return (
-        <div class = "row w-100 h-100">
-            <div class="col"> 
+        <Row className="w-100 h-100">
+            <Col> 
                 <PreviewSection></PreviewSection>
-            </div>
-            <div class="col d-flex justify-content-center align-items-center">
+            </Col>
+            <Col className="d-flex justify-content-center align-items-center">
                 <AuthSection setUser = {props.setUser}></AuthSection>
-            </div>
-        </div>
+            </Col>
+        </Row>
     )
 }

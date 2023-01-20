@@ -1,6 +1,14 @@
 import React, { useState } from "react";
 
-export default function Events() {
-  return <div>events</div>
+export function PastEvents() {
+  return <div>Past events (WIP) </div>
+}
+
+export function UpcomingEvents() {
+    return <div>Upcoming events (WIP) </div>
+}
+
+export function CreateEvent() {
+    return <div>Create an event (WIP) </div>
 }
 
