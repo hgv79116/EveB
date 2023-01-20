@@ -3,14 +3,17 @@
 from ..database import db
 from ..models import User
 
-def remove_senstive(user): 
-    if user is None: 
+DEFAULT_USER_INFO_KEYS = ['id', 'username', 'email']
+FULL_USER_INFO_KEYS = ['id', 'username', 'email', 'phone', 'address', 'city', 'country', 'birthdate']
+
+def extract_user_info(select_result, keys): 
+    if select_result is None: 
         return None
-    return  { 
-        'id': user.id, 
-        'username': user.username, 
-        'email': user.email, 
-    }
+    user_info = {}
+    for key in keys: 
+        user_info[key] = getattr(select_result, key)
+    
+    return user_info
 
 def registerUser(params): 
     try: 
@@ -46,15 +49,20 @@ def validateUser(params):
             user = db.one_or_404(db.select(User).filter_by(email=params['email']))
             
         if user.password == params['password']: 
-            return "validattion succeeded", 200, remove_senstive(user)
+            return "validattion succeeded", 200, extract_user_info(user, DEFAULT_USER_INFO_KEYS)
         
         return "wrong password", 401, None
     except Exception as e:
         print("not found")
         return "Exception: {}".format(e), 401, None
 
-def load_user_from_id(id): 
-    user = db.one_or_404(db.select(User).filter_by(id=id))
-    return remove_senstive(user)
+def load_user_from_id(id, load_full_info = False):
+    keys = DEFAULT_USER_INFO_KEYS if not load_full_info else FULL_USER_INFO_KEYS
+    try: 
+        select_result = db.one_or_404(db.select(User).filter_by(id=id))
+        return extract_user_info(select_result, keys)
+    except Exception as e: 
+        print(e)
+        return None
     
     

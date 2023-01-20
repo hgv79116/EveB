@@ -65,25 +65,24 @@ function FormPage(props) {
     }
     
     return (
-        <div>
-            <form onSubmit={handleSubmit} onChange={handleChange}>
-                {formMode === registerMode && <label>
-                    Username
-                    <input name = "username" type = "text" defaultValue = {defaultFormContent.username} placeholder = "John Doe"/>
-                </label>}
-                <label>
-                    Email
-                    <input name = "email" type = "email" defaultValue = {defaultFormContent.email} placeholder = "johndoe@gmail.com"/>
-                </label>
-                <label>
-                    Password
-                    <input name = "password" type = "text" defaultValue = {defaultFormContent.password} placeholder = "Random password"/>
-                </label>
-                <button type = "submit">Submit</button> 
-            </form>    
-
-            <button onClick={() => changeFormMode()}>Back to {reverseMode(formMode)}</button>
-        </div>  
+        <form onSubmit={handleSubmit} onChange={handleChange} class = "rounded">
+            {
+                formMode === registerMode  && 
+                <div class="form-group">
+                    <label for="username">Username</label>
+                    <input id="username" name = "username" type = "text" defaultValue = {defaultFormContent.username} placeholder = "John Doe" class="form-control"/>
+                </div>
+            }
+            <div class="form-group">
+                    <label for="email">Email</label>
+                    <input id="email" name = "email" type = "email" defaultValue = {defaultFormContent.email} placeholder = "johndoe@gmail.com" class="form-control"/>
+            </div>
+            <div class="form-group">
+                <label for="password">Password</label>
+                <input id="password" name="password" type="password" defaultValue = {defaultFormContent.password} placeholder = "Random password" class="form-control"/>
+            </div>
+            <button type = "submit" class="btn btn-primary">{formMode}</button> 
+        </form>    
     )
 }
 
@@ -97,9 +96,14 @@ export default function AuthSection(props) {
     }
     
     return (
-        formMode == loginMode? 
-        <FormPage setUser = {setUser} formMode={formMode} changeFormMode = {changeFormMode}/>: 
-        <FormPage setUser = {setUser} formMode={formMode} changeFormMode = {changeFormMode}/>
+        <div>
+            { 
+                formMode == loginMode? 
+                <FormPage setUser = {setUser} formMode={formMode} changeFormMode = {changeFormMode}/>: 
+                <FormPage setUser = {setUser} formMode={formMode} changeFormMode = {changeFormMode}/>
+            }
+            <a onClick={() => changeFormMode()}>Back to {reverseMode(formMode)}</a>
+        </div>
         // this looks super ugly, but the point is to make two sperated forms that use separated memory
     )
 }

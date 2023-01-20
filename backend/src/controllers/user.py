@@ -19,6 +19,7 @@ def start_session(user):
 
 @user_bp.before_app_request # applied for all blue print
 def load_user(): 
+    print("loading user")
     user_id = session.get('user_id')
     if user_id: 
         g.user = services.load_user_from_id(user_id)
@@ -28,7 +29,9 @@ def load_user():
 def login_required(endpoint):
     @functools.wraps(endpoint)
     def modified_endpoint(*args, **kwargs): 
+        print("checking logged in")
         if g.user is None: 
+            print("Not logged in")
             return make_response(
                 jsonify({ 
                     'msg': "Not logged in", 
@@ -71,6 +74,7 @@ def logout():
 
 @user_bp.route("/registerUser/", methods = ["POST"])
 def registerUser(): 
+    print("registering")
     params = request.get_json()
     
     msg, status = services.registerUser(params)
@@ -114,3 +118,26 @@ def loadUser():
         }), 
         200, 
     )
+    
+@user_bp.route("/getInfo/")
+@login_required
+def getFullInfo(): 
+    user_id = session.get('user_id') 
+    print(user_id)
+    if user_id is None: 
+        return make_response(
+        jsonify({
+            'msg': "Not logged in", 
+        }), 
+        401, 
+    )
+    else: 
+        user = services.load_user_from_id(user_id, load_full_info=True) 
+        
+        return make_response(
+            jsonify({
+                'msg': "Succeeded", 
+                'user': user
+            }), 
+            200, 
+        )

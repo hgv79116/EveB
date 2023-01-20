@@ -19,16 +19,23 @@ def create_app(config_name):
     app = Flask(__name__)
     app.config.from_object(config_by_name[config_name])
     
+    #
     db.init_app(app)
     with app.app_context():
         db.drop_all()
         db.create_all()
     flask_bcrypt.init_app(app)
 
+    #blueprints
     app.register_blueprint(event_bp)
     app.register_blueprint(user_bp)
-    app.permanent_session_lifetime = timedelta(minutes=5)
-    CORS(app)
+    
+    # CORS(app)
+    # CORS(app, supports_credentials = True)
+    # CORS(app, supports_credentials = True, resources={r"*": {"origins": "http://localhost:3000/"}})
+    ##session
+    # app.config["SESSION_PERMANENT"] = True
+    # app.config['PERMANENT_SESSION_LIFETIME'] = timedelta(hours=5)
     
     return app
 

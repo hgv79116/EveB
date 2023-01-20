@@ -3,10 +3,14 @@ from .database import db
 
 class User(db.Model):
 	id = db.Column(db.Integer, primary_key=True) # SQLAlchemy automatically auto increment
-	username = db.Column(db.String, nullable=False, unique=True) 
-	password = db.Column(db.String, nullable=False)
-	email = db.Column(db.String, unique=True)
-	phone_number = db.Column(db.String)
+	username = db.Column(db.String(16), nullable=False, unique=True) 
+	password = db.Column(db.String(16), nullable=False)
+	email = db.Column(db.String(50), unique=True)
+	phone = db.Column(db.String(16))
+	address = db.Column(db.String(200))
+	city = db.Column(db.String(16))
+	country = db.Column(db.String(16))
+	birthdate = db.Column(db.String(16))
 
 class Event(db.Model): 
 	id = db.Column(db.Integer, primary_key=True) # SQLAlchemy automatically auto increment
